@@ -8,8 +8,11 @@ import {
 } from "../components/item_processor";
 import { enumPinSlotType, WiredPinsComponent } from "../components/wired_pins";
 import { Entity } from "../entity";
-import { MetaBuilding } from "../meta_building";
+import { defaultBuildingVariant, MetaBuilding } from "../meta_building";
 import { GameRoot } from "../root";
+
+/** @enum {string} */
+export const enumFilterVariants = { mirrored: "mirrored" };
 
 export class MetaFilterBuilding extends MetaBuilding {
     constructor() {
@@ -18,6 +21,13 @@ export class MetaFilterBuilding extends MetaBuilding {
 
     getSilhouetteColor() {
         return "#c45c2e";
+    }
+
+    /**
+     * @param {GameRoot} root
+     */
+    getAvailableVariants(root) {
+        return [defaultBuildingVariant, enumFilterVariants.mirrored];
     }
 
     /**
@@ -86,5 +96,46 @@ export class MetaFilterBuilding extends MetaBuilding {
                 processingRequirement: enumItemProcessorRequirements.filter,
             })
         );
+    }
+
+    /**
+     *
+     * @param {Entity} entity
+     * @param {number} rotationVariant
+     * @param {string} variant
+     */
+    updateVariants(entity, rotationVariant, variant) {
+        switch (variant) {
+            case defaultBuildingVariant:
+            case enumFilterVariants.mirrored: {
+                // REGULAR FILTER
+
+                entity.components.ItemAcceptor.setSlots([
+                    {
+                        pos: new Vector(0, 0),
+                        directions: [
+                            variant === defaultBuildingVariant ? enumDirection.bottom : enumDirection.top,
+                        ],
+                    },
+                ]);
+
+                entity.components.ItemEjector.setSlots([
+                    {
+                        pos: new Vector(0, 0),
+                        direction:
+                            variant === defaultBuildingVariant ? enumDirection.top : enumDirection.bottom,
+                    },
+                    {
+                        pos: new Vector(1, 0),
+                        direction: enumDirection.right,
+                    },
+                ]);
+
+                break;
+            }
+
+            default:
+                assertAlways(false, "Unknown filter variant: " + variant);
+        }
     }
 }

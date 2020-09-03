@@ -18,7 +18,7 @@ import { defaultBuildingVariant } from "./meta_building";
 import { MetaConstantSignalBuilding } from "./buildings/constant_signal";
 import { MetaLogicGateBuilding, enumLogicGateVariants } from "./buildings/logic_gate";
 import { MetaLeverBuilding } from "./buildings/lever";
-import { MetaFilterBuilding } from "./buildings/filter";
+import { enumFilterVariants, MetaFilterBuilding } from "./buildings/filter";
 import { MetaWireTunnelBuilding, enumWireTunnelVariants } from "./buildings/wire_tunnel";
 import { MetaDisplayBuilding } from "./buildings/display";
 import { MetaVirtualProcessorBuilding, enumVirtualProcessorVariants } from "./buildings/virtual_processor";
@@ -119,6 +119,7 @@ export function initMetaBuildingRegistry() {
 
     // Filter
     registerBuildingVariant(37, MetaFilterBuilding);
+    registerBuildingVariant(50, MetaFilterBuilding, enumFilterVariants.mirrored);
 
     // Wire tunnel
     registerBuildingVariant(39, MetaWireTunnelBuilding);
